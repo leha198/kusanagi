@@ -1,0 +1,20 @@
+#!/bin/sh
+BASE_DIR=/home/kusanagi
+BK_DIR=/backup/backup-daily
+today=`date +%d-%m-%Y`
+profile=/etc/kusanagi.d/profile.conf
+cd $BASE_DIR
+prov_list=`grep 'KUSANAGI_DIR' $profile | cut -d '"' -f2 |cut -d '/' -f4`
+for prov in $prov_list; do
+      if [ ! -d "$prov/mysql" ]; then
+          mkdir -p $prov/mysql
+      fi
+db_name=`grep "$prov" $profile -A 3 | grep DBNAME | awk -F'"' '{print $2}'`
+db_user=`grep "$prov" $profile -A 3 | grep DBUSER | awk -F'"' '{print $2}'`
+db_pass=`grep "$prov" $profile -A 3 | grep DBPASS | awk -F'"' '{print $2}'`
+find $BASE_DIR/$prov/mysql/ -type f -mmin +600 -name "*.sql" -exec rm -f {} \;
+mysqldump -u$db_user -p$db_pass $db_name > $BASE_DIR/$prov/mysql/""$prov"."$today".sql"
+find $BK_DIR/ -type f -mmin +600 -name ""$prov".*.gz" -exec rm -f {} \;
+tar -czf $BK_DIR/""$prov"."$today".tar.gz" $prov
+chown -R httpd:www $prov/mysql
+done

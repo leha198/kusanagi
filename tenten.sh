@@ -201,8 +201,8 @@ function k_info {
 	echo "  / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /"   >> /etc/motd
 	echo " / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /"    >> /etc/motd
 	echo "/_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/"    >> /etc/motd
-	echo ""
-	echo "Version $k_ver, Powered by Prime Strategy."
+	echo ""							  >> /etc/motd
+	echo "Version $k_ver, Powered by Prime Strategy."	  >> /etc/motd
 	echo "==================================================" >> /etc/motd
 	echo "Kusanagi panel login:"				  >> /etc/motd
 	echo "[Weblink]   http://$ipa/cPanel"                 	  >> /etc/motd

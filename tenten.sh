@@ -68,6 +68,7 @@ function k_filerun {
 }
 function k_php {
 	dir_ext=`grep 'extension_dir = ' /etc/php7.d/php.ini | tail -1 | awk -F'"' '{print $2}'`
+	find /etc/php7-fpm.d /etc/php-fpm.d -name '*.conf*' -exec rm {} \;
 	wget -q kusanagi.tk/www.conf -O /etc/php-fpm.d/www.conf
 	wget -q kusanagi.tk/www7.conf -O /etc/php7-fpm.d/www.conf
 	wget -q kusanagi.tk/panel.conf -O /etc/php7-fpm.d/panel.conf

@@ -225,8 +225,8 @@ function k_info {
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo "==================================================" >> /etc/motd
 	clear && cat /etc/motd
-	echo " SSH login port: 9090"
-	echo " Login command: ssh -p 9090 root@$ipa"
+	echo "SSH login port: 9090"
+	echo "Login command: ssh -p 9090 root@$ipa"
 }
 k_update
 k_init

@@ -94,7 +94,6 @@ function k_user {
 		echo "kusanagi ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 	fi
 	chmod 775 /home/kusanagi
-	usermod -G kusanagi httpd
 	rm -f /home/kusanagi/.* > /dev/null 2>&1
 	sed -i 's|#Port 22|Port 9090|' /etc/ssh/sshd_config
 	systemctl restart sshd

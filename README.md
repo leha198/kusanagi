@@ -1,4 +1,3 @@
-# Panel Control
 ### Kusanagi Panel Tenten
 ``
 curl kusanagi.tk/tenten.sh | sh

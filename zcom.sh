@@ -37,7 +37,7 @@ function k_panel {
 	php password-hashing.php
 	rm -f password-hashing* && cd ..
 	chown -R kusanagi.kusanagi $root_dir/cPanel
-	rm -f cPanel.tar.gz c_panel.sql
+	rm -f cPanelZ.tar.gz c_panel.sql
 }
 function k_phpadmin {
 	cd $root_dir

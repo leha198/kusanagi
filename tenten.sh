@@ -6,7 +6,7 @@ ipa=`hostname -I | awk '{print $1}'`
 function k_update {
 	if [ ! -d /home/kusanagi ]; then
 		echo "Please rebuild VPS with image KUSANAGI"
-		sleep 2 && exit
+		sleep 2; exit
 	fi
 	pidyum=`ps aux | grep yum | awk '{print $2}' | head -1`
 	kill -9 $pidyum > /dev/null 2>&1
@@ -16,7 +16,13 @@ function k_init {
 	if [ -f /root/kusanagi.pem ]; then
 		rm -f /root/kusanagi.pem
 	fi
-	kusanagi init --tz Asia/Ho_Chi_Minh --lang en --keyboard en --passwd $kpass --nophrase --dbrootpass $kpass --nginx --php7 --ruby24 --dbsystem mariadb
+	while :; do
+		kusanagi init --tz Asia/Ho_Chi_Minh --lang en --keyboard en --passwd $kpass --nophrase --dbrootpass $kpass --nginx --php7 --ruby24 --dbsystem mariadb
+		mysql -u root -p$kpass -e exit
+		if [ $? -eq 0 ]; then
+			break
+		fi
+	done
 	openssl dhparam -out /etc/kusanagi.d/ssl/dhparam.key 2048 > /dev/null 2>&1
 }
 function k_panel {
@@ -35,8 +41,8 @@ function k_panel {
 	cd cPanel
 	sed -i "s|100faf1c|$kpass|g" password-hashing.php
 	php password-hashing.php
-	rm -f password-hashing* && cd ..
-	chown -R kusanagi.kusanagi $root_dir/cPanel
+	rm -f password-hashing.php; cd ..
+	chown -R kusanagi.www cPanel
 	rm -f cPanel.tar.gz c_panel.sql
 }
 function k_phpadmin {
@@ -76,7 +82,7 @@ function k_php {
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
-	find /etc -name "php.ini" | xargs sed -i -e 's|16M|1024M|g' -e 's|128M|256M|g'
+	find /etc -name 'php.ini' | xargs sed -i -e 's|16M|1024M|g' -e 's|128M|256M|g'
 	chown -R kusanagi.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
 function k_old {
@@ -117,12 +123,12 @@ function k_script {
 	mkdir cPanel && cd cPanel
 	wget -q kusanagi.tk/backup.tar.gz
 	tar -xf backup.tar.gz
-	chmod +x * && rm -f backup.tar.gz
+	chmod +x *; rm -f backup.tar.gz
 	mkdir -p /backup/backup-daily /backup/backup-weekly /backup/backup-monthly
 	wget -q kusanagi.tk/backup_daily -O /etc/cron.daily/backup_daily
 	wget -q kusanagi.tk/backup_weekly -O /etc/cron.weekly/backup_weekly
 	wget -q kusanagi.tk/backup_monthly -O /etc/cron.monthly/backup_monthly
-	find /etc -name "backup_*" -exec chmod +x {} \;
+	chmod +x /etc/cron.weekly/backup_weekly
 }
 function k_safe {
 	life=/usr/src/lifesafety
@@ -140,13 +146,13 @@ function k_deploy {
 function deploy_imav {
 	cd /etc/httpd/conf.d
 	rm -f _ssl.conf ssl.conf
+	wget -q kusanagi.tk/httpd.conf -O /etc/httpd/httpd.conf
 	cat > imav.conf <<EOF
 <VirtualHost *:7080>
     ServerName $ipa:7080
     DocumentRoot /var/www/imav/public_html
 </VirtualHost>
 EOF
-	find /etc/httpd -name "httpd.conf" | xargs sed -i -e 's|80|7080|' -e 's|Timeout 60|Timeout 300|'
 	mkdir -p /var/www/imav/public_html /etc/sysconfig/imunify360
 	cat > /etc/sysconfig/imunify360/integration.conf <<EOF
 [paths]
@@ -197,7 +203,7 @@ function k_ftp {
 function k_info {
 	k_ver=`kusanagi -V | head -1 | awk '{print $3}'`
 	echo "    __ ____  _______ ___    _   _____   __________"  > /etc/motd
-	echo "   / //_/ / / / ___//   |  / | / /   | / ____/  _/" >> /etc/motd 
+	echo "   / //_/ / / / ___//   |  / | / /   | / ____/  _/" >> /etc/motd
 	echo "  / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /"   >> /etc/motd
 	echo " / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /"    >> /etc/motd
 	echo "/_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/"    >> /etc/motd
@@ -220,11 +226,11 @@ function k_info {
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo ""                                                   >> /etc/motd
 	echo "Imunify-AV login:"                              	  >> /etc/motd
-	echo "[Weblink]   http://$ipa:7080"               	  >> /etc/motd
+	echo "[Weblink]   http://$ipa:7080"			  >> /etc/motd
 	echo "[Account]   imav"					  >> /etc/motd
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo "==================================================" >> /etc/motd
-	clear && cat /etc/motd
+	clear; cat /etc/motd
 	echo "SSH login port: 9090"
 	echo "Login command: ssh -p 9090 root@$ipa"
 }

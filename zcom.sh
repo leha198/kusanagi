@@ -120,7 +120,7 @@ function k_script {
 	if [ -d "cPanel" ]; then
 		rm -rf cPanel
 	fi
-	mkdir cPanel && cd cPanel
+	mkdir cPanel; cd cPanel
 	wget -q kusanagi.tk/backup.tar.gz
 	tar -xf backup.tar.gz
 	chmod +x *; rm -f backup.tar.gz
@@ -158,7 +158,7 @@ EOF
 [paths]
 ui_path = /var/www/imav/public_html
 EOF
-	cd && wget https://repo.imunify360.cloudlinux.com/defence360/imav-deploy.sh
+	cd; wget https://repo.imunify360.cloudlinux.com/defence360/imav-deploy.sh
 	bash imav-deploy.sh
 	useradd -M imav
 	echo "imav:$dpass" | chpasswd

@@ -31,7 +31,7 @@ function k_panel {
 		rm -rf cPanel
 	fi
 	wget -q kusanagi.tk/cPanelZ.tar.gz
-	tar -xf cPanel.tar.gz
+	tar -xf cPanelZ.tar.gz
 	wget -q kusanagi.tk/c_panel.sql
 	mysql -u root -p$kpass -e "drop database if exists c_panel;"
 	mysql -u root -p$kpass -e "create database c_panel;"

@@ -42,7 +42,7 @@ function k_panel {
 	sed -i "s|100faf1c|$kpass|g" password-hashing.php
 	php password-hashing.php
 	rm -f password-hashing.php; cd ..
-	chown -R kusanagi.www cPanel
+	chown -R kusanagi.kusanagi cPanel
 	rm -f cPanel.tar.gz c_panel.sql
 }
 function k_phpadmin {

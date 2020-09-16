@@ -42,7 +42,7 @@ function k_panel {
 	sed -i "s|100faf1c|$kpass|g" password-hashing.php
 	php password-hashing.php
 	rm -f password-hashing.php; cd ..
-	chown -R kusanagi.kusanagi cPanel
+	chown -R kusanagi.www cPanel
 	rm -f cPanel.tar.gz c_panel.sql
 }
 function k_phpadmin {
@@ -52,7 +52,7 @@ function k_phpadmin {
 	fi
 	wget -q kusanagi.tk/mysqlmanager.tar.gz
 	tar -xf mysqlmanager.tar.gz
-	chown -R kusanagi.kusanagi mysqlmanager
+	chown -R kusanagi.www mysqlmanager
 	rm -f mysqlmanager.tar.gz
 }
 function k_filerun {
@@ -83,7 +83,7 @@ function k_php {
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
 	find /etc -name 'php.ini' | xargs sed -i -e 's|16M|1024M|g' -e 's|128M|256M|g'
-	chown -R kusanagi.kusanagi /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
+	chown -R kusanagi.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
 function k_old {
 	cd /home/kusanagi

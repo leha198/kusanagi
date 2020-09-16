@@ -100,7 +100,7 @@ function k_user {
 	if ! grep -q "kusanagi" /etc/sudoers; then
 		echo "kusanagi ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 	fi
-	usermod -G kusanagi,www httpd
+	usermod -G kusanagi httpd
 	chmod 775 /home/kusanagi
 	rm -f /home/kusanagi/.* > /dev/null 2>&1
 	sed -i 's|#Port 22|Port 9090|' /etc/ssh/sshd_config

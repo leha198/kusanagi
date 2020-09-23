@@ -74,7 +74,6 @@ function k_filerun {
 }
 function k_php {
 	dir_ext=`grep 'extension_dir = ' /etc/php7.d/php.ini | tail -1 | awk -F'"' '{print $2}'`
-	find /etc/php7-fpm.d /etc/php-fpm.d -name '*.conf*' -exec rm {} \;
 	wget -q kusanagi.tk/www.conf -O /etc/php-fpm.d/www.conf
 	wget -q kusanagi.tk/www7.conf -O /etc/php7-fpm.d/www.conf
 	wget -q kusanagi.tk/panel.conf -O /etc/php7-fpm.d/panel.conf
@@ -82,8 +81,8 @@ function k_php {
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
-	find /etc -name 'php.ini' | xargs sed -i -e 's|16M|1024M|g' -e 's|128M|256M|g'
-	chown -R kusanagi.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
+	find /etc -name 'php.ini' | xargs sed -i -e 's|16M|128M|g' -e 's|128M|256M|g'
+	chown -R root.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
 function k_old {
 	cd /home/kusanagi

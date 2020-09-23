@@ -169,5 +169,5 @@ fi
 sed -i "s/fqdn/$FQDN/g" /home/kusanagi/$PROFILE/tools/bcache.clear.php
 #Auto wordpress config
 cd /home/kusanagi/$PROFILE/DocumentRoot
-sed -e 's/username_here/'$DBUSER'/' -e 's/password_here/'$DBPASS'/' -e 's/database_name_here/'$DBNAME'/' wp-config-sample.php > wp-config.php
+sed -e 's/username_here/'$DBUSER'/' -e 's/password_here/'$DBPASS'/' -e 's/database_name_here/'$DBNAME'/' wp-config-sample.php > ../wp-config.php
 chown -R httpd.www /home/kusanagi/$PROFILE

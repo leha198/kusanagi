@@ -82,6 +82,7 @@ function k_php {
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
+	echo "max_allowed_packet=1024M" >> /etc/my.cnf
 	chown -R root.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
 function k_old {

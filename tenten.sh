@@ -77,6 +77,7 @@ function k_php {
 	wget -q kusanagi.tk/www.conf -O /etc/php-fpm.d/www.conf
 	wget -q kusanagi.tk/www7.conf -O /etc/php7-fpm.d/www.conf
 	wget -q kusanagi.tk/panel.conf -O /etc/php7-fpm.d/panel.conf
+	wget -q kusanagi.tk/filerun.conf -O /etc/php7-fpm.d/filerun.conf
 	wget -q kusanagi.tk/ioncube.so -O $dir_ext/ioncube.so
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so

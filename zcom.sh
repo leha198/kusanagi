@@ -82,9 +82,6 @@ function k_php {
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
-	if ! grep -q "max_allowed" /etc/my.cnf; then
-		echo "max_allowed_packet=1024M" >> /etc/my.cnf
-	fi
 	chown -R root.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
 
@@ -99,12 +96,11 @@ function k_user {
 	systemctl restart sshd
 }
 function k_nginx {
-	nx_cnf=/etc/nginx/nginx.conf
 	cd /etc/nginx/conf.d
 	rm -f _http.conf _ssl.conf
 	wget -q kusanagi.tk/http.conf -O http.conf
 	sed -i "s|default_server|$ipa|" http.conf
-	sed -i 's|20M|256M|g' $nx_cnf
+	sed -i 's|20M|256M|g' /etc/nginx/nginx.conf
 	chown -R httpd.www /var/cache/nginx
 }
 function k_script {

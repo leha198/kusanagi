@@ -227,7 +227,6 @@ k_script
 k_user
 k_safe
 k_ftp
-k_old
 k_imav
 k_info
 kusanagi restart

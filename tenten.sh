@@ -82,23 +82,12 @@ function k_php {
 	echo "zend_extension = $dir_ext/ioncube.so" > /etc/php7.d/extensions/00-ioncube.ini
 	wget -q kusanagi.tk/bolt.so -O $dir_ext/bolt.so
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
-	if ! grep -q "max_allowed" /etc/sudoers; then
+	if ! grep -q "max_allowed" /etc/my.cnf; then
 		echo "max_allowed_packet=1024M" >> /etc/my.cnf
 	fi
-	echo "max_allowed_packet=1024M" >> /etc/my.cnf
 	chown -R root.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
-function k_old {
-	cd /home/kusanagi
-	list=`ls -l | awk '/^d/ {print $9}'`
-	for domain in $list; do
-		chk=`stat -c '%U' $domain`
-		if [ $chk == kusanagi ]; then
-			chown -R httpd.www $domain
-			find $domain -type d -exec chmod 755 {} \;
-		fi
-	done
-}
+
 function k_user {
 	if ! grep -q "kusanagi" /etc/sudoers; then
 		echo "kusanagi ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -116,7 +105,6 @@ function k_nginx {
 	wget -q kusanagi.tk/http.conf -O http.conf
 	sed -i "s|default_server|$ipa|" http.conf
 	sed -i 's|20M|256M|g' $nx_cnf
-	sed -i 's|user kusanagi kusanagi|user httpd www|' $nx_cnf
 	chown -R httpd.www /var/cache/nginx
 }
 function k_script {
@@ -148,35 +136,24 @@ function k_deploy {
 	wget -q kusanagi.tk/deploy-lamp.sh -O /usr/lib/kusanagi/lib/deploy-lamp.sh
 }
 function deploy_imav {
-	cd /etc/httpd/conf.d
-	rm -f _ssl.conf ssl.conf
-	wget -q kusanagi.tk/httpd.conf -O /etc/httpd/httpd.conf
-	cat > imav.conf <<EOF
-<VirtualHost *:7080>
-    ServerName $ipa:7080
-    DocumentRoot /var/www/imav/public_html
-</VirtualHost>
-EOF
-	mkdir -p /var/www/imav/public_html /etc/sysconfig/imunify360
+	mkdir -p /var/www/imav /etc/sysconfig/imunify360
 	cat > /etc/sysconfig/imunify360/integration.conf <<EOF
 [paths]
-ui_path = /var/www/imav/public_html
+ui_path = /var/www/imav
 EOF
 	cd; wget https://repo.imunify360.cloudlinux.com/defence360/imav-deploy.sh
 	bash imav-deploy.sh
 	useradd -M imav
 	echo "imav:$dpass" | chpasswd
 	echo "imav" >> /etc/sysconfig/imunify360/auth.admin
-	systemctl enable httpd imunify-antivirus
-	systemctl start httpd imunify-antivirus
+	systemctl enable imunify-antivirus
+	systemctl start imunify-antivirus
 	rm -f imav-deploy.sh
 }
 function k_imav {
 	which imunify-antivirus > /dev/null 2>&1
 	if [ $? = 0 ]; then
 		echo "imav:$dpass" | chpasswd
-		systemctl enable httpd
-		systemctl start httpd
 	else
 		deploy_imav
 	fi
@@ -230,7 +207,7 @@ function k_info {
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo ""                                                   >> /etc/motd
 	echo "Imunify-AV login:"                              	  >> /etc/motd
-	echo "[Weblink]   http://$ipa:7080"			  >> /etc/motd
+	echo "[Weblink]   http://$ipa/imav"			  >> /etc/motd
 	echo "[Account]   imav"					  >> /etc/motd
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo "==================================================" >> /etc/motd

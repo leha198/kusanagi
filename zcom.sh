@@ -133,10 +133,8 @@ function k_deploy {
 }
 function deploy_imav {
 	mkdir -p /var/www/imav /etc/sysconfig/imunify360
-	cat > /etc/sysconfig/imunify360/integration.conf <<EOF
-[paths]
-ui_path = /var/www/imav
-EOF
+	echo "[paths]" > /etc/sysconfig/imunify360/integration.conf
+	echo "ui_path = /var/www/imav" >> /etc/sysconfig/imunify360/integration.conf
 	cd; wget https://repo.imunify360.cloudlinux.com/defence360/imav-deploy.sh
 	bash imav-deploy.sh
 	useradd -M imav

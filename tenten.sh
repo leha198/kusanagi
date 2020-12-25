@@ -195,14 +195,14 @@ function k_info {
 	echo "[Account]   root"                               	  >> /etc/motd
 	echo "[Pass   ]   $kpass"                             	  >> /etc/motd
 	echo ""                                                   >> /etc/motd
-	echo "FTP account login:"                                 >> /etc/motd
-	echo "[Host   ]   $ipa"                                   >> /etc/motd
-	echo "[Account]   admin"                                  >> /etc/motd
-	echo "[Pass   ]   $dpass"                                 >> /etc/motd
-	echo ""                                                   >> /etc/motd
 	echo "Imunify-AV login:"                              	  >> /etc/motd
 	echo "[Weblink]   http://$ipa/imav"			  >> /etc/motd
 	echo "[Account]   imav"					  >> /etc/motd
+	echo "[Pass   ]   $dpass"                                 >> /etc/motd
+	echo ""                                                   >> /etc/motd
+	echo "FTP account login:"                                 >> /etc/motd
+	echo "[Host   ]   $ipa"                                   >> /etc/motd
+	echo "[Account]   admin"                                  >> /etc/motd
 	echo "[Pass   ]   $dpass"                                 >> /etc/motd
 	echo "==================================================" >> /etc/motd
 	clear; cat /etc/motd

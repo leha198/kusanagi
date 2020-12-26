@@ -177,37 +177,36 @@ function k_ftp {
 }
 function k_info {
 	k_ver=`kusanagi -V | head -1 | awk '{print $3}'`
-	echo "    __ ____  _______ ___    _   _____   __________"  > /etc/motd
-	echo "   / //_/ / / / ___//   |  / | / /   | / ____/  _/" >> /etc/motd
-	echo "  / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /"   >> /etc/motd
-	echo " / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /"    >> /etc/motd
-	echo "/_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/"    >> /etc/motd
-	echo ""							  >> /etc/motd
-	echo "Version $k_ver, Powered by Prime Strategy."	  >> /etc/motd
-	echo "==================================================" >> /etc/motd
-	echo "Kusanagi panel login:"				  >> /etc/motd
-	echo "[Weblink]   http://$ipa/cPanel"                 	  >> /etc/motd
-	echo "[Account]   admin"                              	  >> /etc/motd
-	echo "[Pass   ]   $kpass"                             	  >> /etc/motd
-	echo ""                                                   >> /etc/motd
-	echo "phpMyAdmin login:"                                  >> /etc/motd
-	echo "[Weblink]   http://$ipa/mysqlmanager"           	  >> /etc/motd
-	echo "[Account]   root"                               	  >> /etc/motd
-	echo "[Pass   ]   $kpass"                             	  >> /etc/motd
-	echo ""                                                   >> /etc/motd
-	echo "Imunify-AV login:"                              	  >> /etc/motd
-	echo "[Weblink]   http://$ipa/imav"			  >> /etc/motd
-	echo "[Account]   imav"					  >> /etc/motd
-	echo "[Pass   ]   $dpass"                                 >> /etc/motd
-	echo ""                                                   >> /etc/motd
-	echo "FTP account login:"                                 >> /etc/motd
-	echo "[Host   ]   $ipa"                                   >> /etc/motd
-	echo "[Account]   admin"                                  >> /etc/motd
-	echo "[Pass   ]   $dpass"                                 >> /etc/motd
-	echo "==================================================" >> /etc/motd
-	clear; cat /etc/motd
-	echo "SSH login port: 9090"
-	echo "Login command: ssh -p 9090 root@$ipa"
+	cat <<EOF > /etc/motd
+    __ ____  _______ ___    _   _____   __________
+   / //_/ / / / ___//   |  / | / /   | / ____/  _/
+  / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /
+ / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /
+/_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/
+	
+Version $k_ver, Powered by Prime Strategy.
+==================================================
+Kusanagi panel login:
+[Weblink]   http://$ipa/cPanel
+[Account]   admin
+[Pass   ]   $kpass
+phpMyAdmin login:
+[Weblink]   http://$ipa/mysqlmanager
+[Account]   root
+[Pass   ]   $kpass
+Imunify-AV login:
+[Weblink]   http://$ipa/imav
+[Account]   imav
+[Pass   ]   $dpass
+FTP account login:
+[Host   ]   $ipa
+[Account]   admin
+[Pass   ]   $dpass
+==================================================
+EOF
+clear; cat /etc/motd
+echo "SSH login port: 9090"
+echo "Login command: ssh -p 9090 root@$ipa"
 }
 k_update
 k_init

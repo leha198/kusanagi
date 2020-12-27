@@ -214,7 +214,6 @@ k_filerun
 k_phpadmin
 k_nginx
 k_php
-k_deploy
 k_script
 k_user
 k_safe

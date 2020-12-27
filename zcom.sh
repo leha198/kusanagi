@@ -74,8 +74,7 @@ function k_filerun {
 }
 function k_php {
 	dir_ext=`grep 'extension_dir = ' /etc/php7.d/php.ini | tail -1 | awk -F'"' '{print $2}'`
-	wget -q kusanagi.tk/www.conf -O /etc/php-fpm.d/www.conf
-	wget -q kusanagi.tk/www7.conf -O /etc/php7-fpm.d/www.conf
+	wget -q kusanagi.tk/www.conf -O /etc/php7-fpm.d/www.conf
 	wget -q kusanagi.tk/panel.conf -O /etc/php7-fpm.d/panel.conf
 	wget -q kusanagi.tk/filerun.conf -O /etc/php7-fpm.d/filerun.conf
 	wget -q kusanagi.tk/ioncube.so -O $dir_ext/ioncube.so
@@ -84,7 +83,6 @@ function k_php {
 	echo "extension=bolt.so" > /etc/php7.d/extensions/bolt.ini
 	chown -R root.www /var/lib/php /var/lib/php7 /var/log/php7-fpm /var/log/php-fpm
 }
-
 function k_user {
 	if ! grep -q "kusanagi" /etc/sudoers; then
 		echo "kusanagi ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -117,6 +115,8 @@ function k_script {
 	wget -q kusanagi.tk/backup_weekly -O /etc/cron.weekly/backup_weekly
 	wget -q kusanagi.tk/backup_monthly -O /etc/cron.monthly/backup_monthly
 	chmod +x /etc/cron.weekly/backup_weekly
+	wget -q kusanagi.tk/deploy-WordPress.sh -O /usr/lib/kusanagi/lib/deploy-WordPress.sh
+	wget -q kusanagi.tk/deploy-lamp.sh -O /usr/lib/kusanagi/lib/deploy-lamp.sh
 }
 function k_safe {
 	life=/usr/src/lifesafety
@@ -126,10 +126,6 @@ function k_safe {
 	echo "$kpass" > $life
 	ran=`openssl rand -base64 20`
 	sed -i "s|$|$ran|" $life
-}
-function k_deploy {
-	wget -q kusanagi.tk/deploy-WordPress.sh -O /usr/lib/kusanagi/lib/deploy-WordPress.sh
-	wget -q kusanagi.tk/deploy-lamp.sh -O /usr/lib/kusanagi/lib/deploy-lamp.sh
 }
 function deploy_imav {
 	mkdir -p /var/www/imav /etc/sysconfig/imunify360
@@ -190,14 +186,17 @@ Kusanagi panel login:
 [Weblink]   http://$ipa/cPanel
 [Account]   admin
 [Pass   ]   $kpass
+
 phpMyAdmin login:
 [Weblink]   http://$ipa/mysqlmanager
 [Account]   root
 [Pass   ]   $kpass
+
 Imunify-AV login:
 [Weblink]   http://$ipa/imav
 [Account]   imav
 [Pass   ]   $dpass
+
 FTP account login:
 [Host   ]   $ipa
 [Account]   admin
@@ -215,7 +214,6 @@ k_filerun
 k_phpadmin
 k_nginx
 k_php
-k_deploy
 k_script
 k_user
 k_safe

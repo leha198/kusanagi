@@ -115,6 +115,8 @@ function k_script {
 	wget -q kusanagi.tk/backup_weekly -O /etc/cron.weekly/backup_weekly
 	wget -q kusanagi.tk/backup_monthly -O /etc/cron.monthly/backup_monthly
 	chmod +x /etc/cron.weekly/backup_weekly
+	wget -q kusanagi.tk/deploy-WordPress.sh -O /usr/lib/kusanagi/lib/deploy-WordPress.sh
+	wget -q kusanagi.tk/deploy-lamp.sh -O /usr/lib/kusanagi/lib/deploy-lamp.sh
 }
 function k_safe {
 	life=/usr/src/lifesafety
@@ -124,10 +126,6 @@ function k_safe {
 	echo "$kpass" > $life
 	ran=`openssl rand -base64 20`
 	sed -i "s|$|$ran|" $life
-}
-function k_deploy {
-	wget -q kusanagi.tk/deploy-WordPress.sh -O /usr/lib/kusanagi/lib/deploy-WordPress.sh
-	wget -q kusanagi.tk/deploy-lamp.sh -O /usr/lib/kusanagi/lib/deploy-lamp.sh
 }
 function deploy_imav {
 	mkdir -p /var/www/imav /etc/sysconfig/imunify360

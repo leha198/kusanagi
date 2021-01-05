@@ -1,10 +1,10 @@
 ### Kusanagi Panel Tenten
 ``
-wget kusanagi.tk/tenten.sh; sh tenten.sh
+wget -O- kusanagi.tk/tenten.sh | sh
 ``
 ### Kusanagi Panel Zcom
 ``
-wget kusanagi.tk/zcom.sh; sh zcom.sh
+wget -O- kusanagi.tk/zcom.sh | sh
 ``
 ### Secure Cloud
 ``

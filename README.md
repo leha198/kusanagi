@@ -6,7 +6,3 @@ wget -O- kusanagi.tk/tenten.sh | sh
 ``
 wget -O- kusanagi.tk/zcom.sh | sh
 ``
-### Secure Cloud
-``
-curl kusanagi.tk/secure.sh | sh
-``

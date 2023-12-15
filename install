@@ -1,0 +1,34 @@
+#!/bin/bash
+PW=`head /dev/urandom | tr -dc a-z0-9A-Z | head -c 16`
+EL_VER=`uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/'`
+#Check OS and import KEY
+if [ "$EL_VER" == "el8" ]; then
+	wget https://raw.githubusercontent.com/leha198/kusanagi/main/RPM-GPG-KEY-prime-strategy_el8 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+elif [ "$EL_VER" == "el9" ]; then
+	wget https://raw.githubusercontent.com/leha198/kusanagi/main/RPM-GPG-KEY-prime-strategy_el9 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+else
+	echo "Kusanagi 9 does not support $EL_VER"
+fi
+
+#Import repo prime-strategy
+cat << EOT > /etc/yum.repos.d/kusanagi.repo
+[kusanagi]
+name=KUSANAGI RPM packages for \$contentdir/\$releasever
+baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/rpm
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+
+[kusanagi-source]
+name=KUSANAGI RPM packages for \$contentdir/\$releasever - Source
+baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/source
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+EOT
+
+#Update OS and install Kusanagi
+dnf update -y
+dnf install kusanagi -y
+kusanagi setup PLATFORM
+kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx125 --mariadb10.5

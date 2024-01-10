@@ -33,4 +33,3 @@ dnf install kusanagi -y
 kusanagi setup PLATFORM
 kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx125 --mariadb10.5
 ln -s /opt/kusanagi/sbin/nginx /sbin/nginx
-ln -s /opt/kusanagi/sbin/httpd /sbin/httpd

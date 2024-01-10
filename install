@@ -35,3 +35,5 @@ kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --l
 ln -s /opt/kusanagi/sbin/nginx /sbin/nginx
 kusanagi monit off
 printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation
+sed -i "s|#bind-address=0.0.0.0|bind-address=127.0.0.1|g" /etc/my.cnf.d/server.cnf
+systemctl restart mariadb

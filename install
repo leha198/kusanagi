@@ -1,35 +1,40 @@
 #!/bin/bash
-PW=`head /dev/urandom | tr -dc a-z0-9A-Z | head -c 16`
-EL_VER=`uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/'`
-#Check OS and import KEY
-if [ "$EL_VER" == "el8" ]; then
-	wget https://raw.githubusercontent.com/leha198/kusanagi/main/RPM-GPG-KEY-prime-strategy_el8 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
-elif [ "$EL_VER" == "el9" ]; then
-	wget https://raw.githubusercontent.com/leha198/kusanagi/main/RPM-GPG-KEY-prime-strategy_el9 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+
+# Generate random password
+PW=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 16)
+
+# Determine OS version and import GPG key
+EL_VER=$(uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/')
+if [ "$EL_VER" == "el8" ] || [ "$EL_VER" == "el9" ]; then
+    GPG_KEY="RPM-GPG-KEY-prime-strategy_$EL_VER"
+    wget "https://raw.githubusercontent.com/leha198/kusanagi/main/$GPG_KEY" -O "/etc/pki/rpm-gpg/$GPG_KEY"
 else
-	echo "Kusanagi 9 does not support $EL_VER"
+    echo "Kusanagi 9 does not support $EL_VER"
+    exit 1
 fi
 
-#Import repo prime-strategy
+# Import Kusanagi repository
 cat << EOT > /etc/yum.repos.d/kusanagi.repo
 [kusanagi]
 name=KUSANAGI RPM packages for \$contentdir/\$releasever
 baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/rpm
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+gpgkey=file:///etc/pki/rpm-gpg/$GPG_KEY
 
 [kusanagi-source]
 name=KUSANAGI RPM packages for \$contentdir/\$releasever - Source
 baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/source
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
+gpgkey=file:///etc/pki/rpm-gpg/$GPG_KEY
 EOT
 
-#Update OS and install Kusanagi
+# Update OS and install Kusanagi
 dnf update -y
 dnf install kusanagi -y
+
+# Setup Kusanagi
 kusanagi setup PLATFORM
 kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx125 --mariadb10.5
 ln -s /opt/kusanagi/sbin/nginx /sbin/nginx
@@ -38,11 +43,14 @@ printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation
 sed -i "s|#bind-address=0.0.0.0|bind-address=127.0.0.1|g" /etc/my.cnf.d/server.cnf
 systemctl restart mariadb
 systemctl disable --now postfix
-#Install extension gmp
-dnf install htop php82-php-gmp -y
-ln -s /opt/remi/php82/root/usr/lib64/php/modules/gmp.so `php -ini | awk '/extension_dir/{print $NF; exit}'`/gmp.so
+
+# Install PHP extension gmp
+dnf install php82-php-gmp -y
+PHP_EXTENSION_DIR=$(php -ini | awk '/extension_dir/{print $NF; exit}')
+ln -s /opt/remi/php82/root/usr/lib64/php/modules/gmp.so "$PHP_EXTENSION_DIR/gmp.so"
 sed -i -e 's/;extension=gmp/extension=gmp/' -e 's/^date.timezone = UTC/date.timezone = Asia\/Ho_Chi_Minh/' /etc/opt/kusanagi/php.d/php.ini
 
+# Create cron job for Cloudflare IPs
 cat << EOT > /etc/cron.monthly/cloudflare-ips
 #!/bin/bash
 {
@@ -52,11 +60,9 @@ curl -s https://www.cloudflare.com/ips-v6 | sed "s|^|set_real_ip_from |g; s|\\$|
 echo
 echo "real_ip_header X-Forwarded-For;"
 } > /etc/opt/kusanagi/nginx/conf.d/cloudflare.conf
-nginx -t
-if [ $? -eq 0 ]; then
-        systemctl reload nginx
-fi
+nginx -t && systemctl reload nginx
 EOT
 chmod +x /etc/cron.monthly/cloudflare-ips
-/etc/cron.monthly/cloudflare-ips
+
+# Restart Kusanagi
 kusanagi restart

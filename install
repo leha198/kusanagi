@@ -7,7 +7,7 @@ PW=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 16)
 EL_VER=$(uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/')
 if [ "$EL_VER" == "el8" ] || [ "$EL_VER" == "el9" ]; then
     GPG_KEY="RPM-GPG-KEY-prime-strategy_$EL_VER"
-    wget "https://raw.githubusercontent.com/leha198/kusanagi/main/$GPG_KEY" -O "/etc/pki/rpm-gpg/$GPG_KEY"
+    wget "https://raw.githubusercontent.com/leha198/kusanagi/main/$GPG_KEY" -O "/etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy"
 else
     echo "Kusanagi 9 does not support $EL_VER"
     exit 1

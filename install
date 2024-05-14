@@ -20,14 +20,14 @@ name=KUSANAGI RPM packages for \$contentdir/\$releasever
 baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/rpm
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/$GPG_KEY
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
 
 [kusanagi-source]
 name=KUSANAGI RPM packages for \$contentdir/\$releasever - Source
 baseurl=https://repo.prime-strategy.co.jp/kusanagi9/centos/\$releasever/source
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/$GPG_KEY
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
 EOT
 
 # Update OS and install Kusanagi

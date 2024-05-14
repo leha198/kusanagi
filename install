@@ -63,6 +63,7 @@ echo "real_ip_header X-Forwarded-For;"
 nginx -t && systemctl reload nginx
 EOT
 chmod +x /etc/cron.monthly/cloudflare-ips
+/etc/cron.monthly/cloudflare-ips
 
 # Restart Kusanagi
 kusanagi restart

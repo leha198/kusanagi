@@ -38,3 +38,8 @@ printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation
 sed -i "s|#bind-address=0.0.0.0|bind-address=127.0.0.1|g" /etc/my.cnf.d/server.cnf
 systemctl restart mariadb
 systemctl disable --now postfix
+#Install extension gmp
+dnf install htop php82-php-gmp -y
+ln -s /opt/remi/php82/root/usr/lib64/php/modules/gmp.so `php -ini | awk '/extension_dir/{print $NF; exit}'`/gmp.so
+sed -i -e 's/;extension=gmp/extension=gmp/' -e 's/^date.timezone = UTC/date.timezone = Asia\/Ho_Chi_Minh/' /etc/opt/kusanagi/php.d/php.ini
+kusanagi restart

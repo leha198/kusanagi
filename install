@@ -12,7 +12,6 @@ fi
 cat << EOT > /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.22 (GNU/Linux)
-
 mQINBFW4oAoBEAC2AWk69eN9BfwpeAGMOm3ueiGmZQ9sV6qX+EacaiIM0o5QsUg6
 Pfq+S7T2/z8Cv16nSBHBgptL5E7nFUAfzw5b8cLfu8qXLHbkYhIQjJbVNQdkJ4lQ
 yJhOvbv6eoAkRdbNNvhnUeUFaPuEvsAnGXgxWbYgJTXKqpH0NrQhO35V0pW3bKiu

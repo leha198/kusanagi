@@ -98,6 +98,7 @@ systemctl disable --now postfix
 
 # Install PHP extension gmp
 dnf module enable php:remi-8.2 -y
+dnf install php-gmp -y
 PHP_EXTENSION_DIR=$(php -ini | awk '/extension_dir/{print $NF; exit}')
 ln -s /usr/lib64/php/modules/gmp.so "$PHP_EXTENSION_DIR/gmp.so"
 sed -i -e 's/;extension=gmp/extension=gmp/' -e 's/^date.timezone = UTC/date.timezone = Asia\/Ho_Chi_Minh/' /etc/opt/kusanagi/php.d/php.ini

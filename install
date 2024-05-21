@@ -88,38 +88,13 @@ dnf install kusanagi -y
 
 # Setup Kusanagi
 kusanagi setup PLATFORM
-kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php83 --nginx125 --mariadb10.5
+kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx125 --mariadb10.5
 ln -s /opt/kusanagi/sbin/nginx /sbin/nginx
 kusanagi monit off
 printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation
 sed -i "s|#bind-address=0.0.0.0|bind-address=127.0.0.1|g" /etc/my.cnf.d/server.cnf
 systemctl restart mariadb
 systemctl disable --now postfix
-
-# Install PHP extension gmp
-dnf module enable php:remi-8.3 -y
-dnf install php-gmp -y
-PHP_EXTENSION_DIR=$(php -ini | awk '/extension_dir/{print $NF; exit}')
-ln -s /usr/lib64/php/modules/gmp.so "$PHP_EXTENSION_DIR/gmp.so"
-sed -i -e 's/;extension=gmp/extension=gmp/' -e 's/^date.timezone = UTC/date.timezone = Asia\/Ho_Chi_Minh/' /etc/opt/kusanagi/php.d/php.ini
-
-# Create cron job for Cloudflare IPs
-cat << EOT > /etc/cron.monthly/cloudflare-ips
-#!/bin/bash
-{
-curl -s https://www.cloudflare.com/ips-v4 | sed "s|^|set_real_ip_from |g; s|\\$|;|g"
-echo
-curl -s https://www.cloudflare.com/ips-v6 | sed "s|^|set_real_ip_from |g; s|\\$|;|g"
-echo
-echo "real_ip_header X-Forwarded-For;"
-} > /etc/opt/kusanagi/nginx/conf.d/cloudflare.conf
-nginx -t
-if [ $? -eq 0 ]; then
-	systemctl reload nginx
-fi
-EOT
-chmod +x /etc/cron.monthly/cloudflare-ips
-/etc/cron.monthly/cloudflare-ips
 
 # Restart Kusanagi
 kusanagi restart

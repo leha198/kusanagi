@@ -88,7 +88,7 @@ dnf install kusanagi -y
 
 # Setup Kusanagi
 kusanagi setup PLATFORM
-kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx125 --mariadb10.5
+kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php83 --nginx125 --mariadb10.5
 ln -s /opt/kusanagi/sbin/nginx /sbin/nginx
 kusanagi monit off
 printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation

@@ -3,12 +3,8 @@
 # Generate random password
 PW=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 16)
 
-# Determine OS version and import GPG key
-EL_VER=$(uname -r | sed 's/^.*\(el[0-9]\+\).*$/\1/')
-if [ ! "$EL_VER" == "el8" ]; then
-    echo "Kusanagi 9 does not support $EL_VER"
-    exit 1
-fi
+# Import GPG key
+
 cat << EOT > /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.22 (GNU/Linux)

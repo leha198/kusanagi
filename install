@@ -1,10 +1,8 @@
 #!/bin/bash
-
 # Generate random password
 PW=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 16)
 
 # Import GPG key
-
 cat << EOT > /etc/pki/rpm-gpg/RPM-GPG-KEY-prime-strategy
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2.0.22 (GNU/Linux)

@@ -88,8 +88,8 @@ dnf install kusanagi -y
 
 # Setup Kusanagi
 kusanagi setup PLATFORM
-kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php82 --nginx126 --mariadb10.5
-ln -s /opt/kusanagi/nginx126/sbin/nginx /sbin/nginx
+kusanagi init --nophrase --passwd $PW --dbrootpass $PW --tz Asia/Ho_Chi_Minh --lang en --keyboard en --php83 --nginx128 --mariadb10.11
+ln -s /opt/kusanagi/nginx128/sbin/nginx /sbin/nginx
 kusanagi monit off
 printf "\n y\n n\n y\n y\n y\n y\n" | mysql_secure_installation
 sed -i "s|#bind-address=0.0.0.0|bind-address=127.0.0.1|g" /etc/my.cnf.d/server.cnf

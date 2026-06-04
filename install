@@ -43,3 +43,15 @@ systemctl disable --now postfix
 
 # Restart Kusanagi
 kusanagi restart
+
+# Add Cloudflare IP
+{
+    curl -s https://www.cloudflare.com/ips-v4 | sed 's|^|set_real_ip_from |;s|$|;|'
+    echo
+    curl -s https://www.cloudflare.com/ips-v6 | sed 's|^|set_real_ip_from |;s|$|;|'
+    echo
+    echo "real_ip_header X-Forwarded-For;"
+} | tr -s '\n' '\n' | tee \
+    /etc/opt/kusanagi/nginx/conf.with_httpd.d/cloudflare.conf \
+    /etc/opt/kusanagi/nginx/conf.d/cloudflare.conf
+
